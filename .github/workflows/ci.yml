@@ -1,43 +1,66 @@
-name: CI
+name: CI + Allure Report
 
-# Run on every push and pull request to main
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
+# NEW: needed to allow the workflow to publish to GitHub Pages
+permissions:
+  contents: write
+
 jobs:
   test:
-    runs-on: ubuntu-latest   # GitHub spins up a fresh Ubuntu VM for you
-
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12"]   # test on 3 versions at once
+    runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out your code onto the VM
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Install Python (the version from the matrix above)
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
 
-      # 3. Install your dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # 4. Lint — fail the build if code style is bad
+      # NEW: Allure needs Java to generate the HTML report
+      - name: Set up Java (for Allure CLI)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # NEW: install the Allure command-line tool
+      - name: Install Allure CLI
+        run: |
+          curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -zxvf allure.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+
       - name: Lint with flake8
         run: flake8 stats/ tests/ --max-line-length=100
 
-      # 5. Run tests with coverage
-      - name: Run tests with coverage
-        run: pytest tests/ --cov=stats --cov-report=term-missing
+      # UPDATED: --alluredir saves raw results that Allure CLI will process
+      - name: Run tests with coverage + Allure results
+        run: |
+          pytest tests/ \
+            --cov=stats \
+            --cov-report=term-missing \
+            --cov-fail-under=80 \
+            --alluredir=allure-results
 
-      # 6. Fail the build if coverage drops below 80%
-      - name: Enforce coverage threshold
-        run: pytest tests/ --cov=stats --cov-fail-under=80
+      # NEW: turn raw results into a full HTML report
+      - name: Generate Allure HTML report
+        run: allure generate allure-results --clean -o allure-report
+
+      # NEW: publish the report to GitHub Pages
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'   # only deploy on main, not PRs
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
