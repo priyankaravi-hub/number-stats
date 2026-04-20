@@ -1,5 +1,4 @@
 pytest
 pytest-cov
-pytest-allure-adaptor
 flake8
 allure-pytest
