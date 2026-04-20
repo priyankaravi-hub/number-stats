@@ -1,0 +1,6 @@
+"Epic","Feature","Story","FAILED","BROKEN","PASSED","SKIPPED","UNKNOWN"
+"","Mean","Error handling","0","0","1","0","0"
+"","Mode","Basic calculation","0","0","1","0","0"
+"","Median","Even-length list","0","0","1","0","0"
+"","Mean","Basic calculation","0","0","1","0","0"
+"","Median","Odd-length list","0","0","1","0","0"

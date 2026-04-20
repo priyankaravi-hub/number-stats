@@ -1,0 +1,6 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Mon Apr 20 06:41:48 UTC 2026","Mon Apr 20 06:41:48 UTC 2026","0","tests","test_calculator","","","","test_mean_empty_raises",""
+"passed","Mon Apr 20 06:41:48 UTC 2026","Mon Apr 20 06:41:48 UTC 2026","0","tests","test_calculator","","","","test_mode_basic",""
+"passed","Mon Apr 20 06:41:48 UTC 2026","Mon Apr 20 06:41:48 UTC 2026","0","tests","test_calculator","","","","test_median_even",""
+"passed","Mon Apr 20 06:41:48 UTC 2026","Mon Apr 20 06:41:48 UTC 2026","1","tests","test_calculator","","","","test_mean_basic",""
+"passed","Mon Apr 20 06:41:48 UTC 2026","Mon Apr 20 06:41:48 UTC 2026","0","tests","test_calculator","","","","test_median_odd",""
