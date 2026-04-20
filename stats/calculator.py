@@ -3,6 +3,7 @@ def mean(numbers):
         raise ValueError("List cannot be empty")
     return sum(numbers) / len(numbers)
 
+
 def median(numbers):
     if not numbers:
         raise ValueError("List cannot be empty")
@@ -11,6 +12,7 @@ def median(numbers):
     if len(sorted_nums) % 2 == 0:
         return (sorted_nums[mid - 1] + sorted_nums[mid]) / 2
     return sorted_nums[mid]
+
 
 def mode(numbers):
     if not numbers:
